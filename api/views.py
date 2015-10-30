@@ -1,15 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-
 from django.contrib.auth.models import User, Group
 from rest_framework import permissions, routers, serializers, viewsets
 from api.serializers import UserSerializer, GroupSerializer
 from rest_framework.renderers import JSONRenderer
 
-
-
-def index(request):
-    return HttpResponse("Index page.")
 
 class UserViewSet(viewsets.ModelViewSet):
     """
