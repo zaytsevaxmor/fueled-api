@@ -1,18 +1,14 @@
-from django.conf.urls import url, patterns, include
-from rest_framework import routers
-from django.contrib import admin
-admin.autodiscover()
-from api import views
+from django.conf.urls import include, patterns, url
+from rest_framework import routers,authtoken
+from django.views.generic import TemplateView
+from api.views import UserViewSet, GroupViewSet
 
 router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet)
-router.register(r'groups', views.GroupViewSet)
+router.register(r'users', UserViewSet)
+router.register(r'groups', GroupViewSet)
 
-# Wire up our API using automatic URL routing.
-# Additionally, we include login URLs for the browsable API.
-urlpatterns = [
-    url(r'^', include(router.urls)),
-    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^admin/', include(admin.site.urls)),
-]
+urlpatterns = patterns('',
+    url(r'api/v1/auth/login/', 'rest_framework_jwt.views.obtain_jwt_token'),
+    url(r'api/v1/', include(router.urls)),
+    url(r'^.*$', TemplateView.as_view(template_name='index.html')),
+)
